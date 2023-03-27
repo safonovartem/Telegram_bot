@@ -12,11 +12,11 @@ def start(message):
 
 @my_bot.message_handler()
 def get_user_text(message):
-    if message.text == "Hi":
+    if message.text.lower() == "Hi":
         my_bot.send_message(message.chat.id, "И тsебе привет" , message, parse_mode="html")# Выводится вся информация из message (Нужно потом удалить)
-    elif message.text == "id":
+    elif message.text.lower() == "id":
         my_bot.send_message(message.chat.id, f"Твой id:{message.from_user.id}", parse_mode="html")
-    elif message.text == "photo":#Делает запрос на фото
+    elif message.text.lower() == "photo":#Делает запрос на фото
         photo = open("maxresdefault.jpg", "rb")#Отправляю фото
         my_bot.send_photo(message.chat.id, photo)
     else:
