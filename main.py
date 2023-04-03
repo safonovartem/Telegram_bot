@@ -17,7 +17,12 @@ def start(message):
     else:
         mess = f"Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>"
         bot.send_message(message.chat.id, mess, parse_mode="html")
-
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)  # Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    website = types.KeyboardButton("/website")
+    start = types.KeyboardButton("/start")
+    citys = types.KeyboardButton("/citys")
+    markup.add(website, start, citys)  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Выберите команду", reply_markup=markup)
 
 @bot.message_handler(commands = ['website'])
 def website(message):
@@ -25,13 +30,18 @@ def website(message):
     markup.add(types.InlineKeyboardButton("Посетить сайт Афиши", url ="https://www.afisha.ru/tver"))#Текст Кнопки и адрес ссылки
     bot.send_message(message.chat.id, "Официальнный сайт Афиши в Твери", reply_markup=markup)
 
-@bot.message_handler(commands = ['help'])
+@bot.message_handler(commands = ['citys'])
 def website(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 2)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
-    website = types.KeyboardButton("/website")
-    start = types.KeyboardButton("/start")
-    markup.add(website, start)#Текст Кнопки и адрес ссылки
-    bot.send_message(message.chat.id, "Выберите команду", reply_markup=markup)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 20)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    Tver = types.KeyboardButton("/Tver")
+    Moscow = types.KeyboardButton("/Moscow")
+    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
+    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
+    Novorossiysk = types.KeyboardButton("/Novorossiysk")
+    Bryansk = types.KeyboardButton("/Bryansk")
+    Velikiy_Novgorod = types.KeyboardButton("/Velikiy_Novgorod")
+    markup.add(Tver, Moscow, Saint_Petersburg, Nizhny_Novgorod, Novorossiysk, Bryansk, Velikiy_Novgorod)#Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
 
 @bot.message_handler()
 def get_user_text(message):
