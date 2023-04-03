@@ -39,5 +39,5 @@ def website(message):
     start = types.KeyboardButton("Start")
     markup.add(website, start)#Текст Кнопки и адрес ссылки
     my_bot.send_message(message.chat.id, "Перейдите на сайт", reply_markup=markup)
-
+# PROVERKA PROVERKA
 my_bot.polling(none_stop=True)
