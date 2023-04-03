@@ -3,41 +3,44 @@ from bs4 import BeautifulSoup
 import telebot
 from telebot import types
 
-my_bot = telebot.TeleBot("6106406169:AAGwZNpsbh-ntmNfSZu1cfbFrLWMCzW3gdo") #Сюда вписать токен бота
+bot = telebot.TeleBot("6106406169:AAGwZNpsbh-ntmNfSZu1cfbFrLWMCzW3gdo") #Сюда вписать токен бота
 
-@my_bot.message_handler(commands=["start"]) # Отслеживание команды Старт
+@bot.message_handler(commands=['start']) # Отслеживание команды Старт
 def start(message):
-    mess = f"Здравствуйте, <b>{message.from_user.first_name} {message.from_user.last_name}</b> чем могу помочь?"
-    my_bot.send_message(message.chat.id, mess, parse_mode="html") #html можно изменить
-
-@my_bot.message_handler()
-def get_user_text(message):
-    if message.text.lower() == "Hi":
-        my_bot.send_message(message.chat.id, "И тsебе привет" , message, parse_mode="html")# Выводится вся информация из message (Нужно потом удалить)
-    elif message.text.lower() == "id":
-        my_bot.send_message(message.chat.id, f"Твой id:{message.from_user.id}", parse_mode="html")
-    elif message.text.lower() == "photo":#Делает запрос на фото
-        photo = open("maxresdefault.jpg", "rb")#Отправляю фото
-        my_bot.send_photo(message.chat.id, photo)
+    mess = f"Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>"
+    if message.from_user.last_name == None:
+        mess = f"Привет, <b>{message.from_user.first_name}</b>"
+        bot.send_message(message.chat.id, mess, parse_mode="html") #html можно изменить
+    elif message.from_user.first_name == None:
+        mess = f"Привет,<b>{message.from_user.last_name}</b>"
+        bot.send_message(message.chat.id, mess, parse_mode="html")
     else:
-        my_bot.send_message(message.chat.id, "Я тебя не понимаю", parse_mode="html")
+        mess = f"Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>"
+        bot.send_message(message.chat.id, mess, parse_mode="html")
 
-#@my_bot.message_handlers(content_types = ['photo'])#Человек отправляет фото
-#def get_user_photo(message):
-    #my_bot.send_message((message.chat.id, "Вау, крутое фото!"))#Реакция на фото
 
-@my_bot.message_handler(content_types = ['website'])
+@bot.message_handler(commands = ['website'])
 def website(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Посетить сайт Афиши"), url ="")#Текст Кнопки и адрес ссылки
-    my_bot.send_message(message.chat.id, "Официальный сайт", reply_markup=markup)
+    markup.add(types.InlineKeyboardButton("Посетить сайт Афиши", url ="https://www.afisha.ru/tver"))#Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Официальнный сайт Афиши в Твери", reply_markup=markup)
 
-@my_bot.message_handler(content_types = ['help'])
+@bot.message_handler(commands = ['help'])
 def website(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 2)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
-    website = types.KeyboardButton("Веб Сайт")
-    start = types.KeyboardButton("Start")
+    website = types.KeyboardButton("/website")
+    start = types.KeyboardButton("/start")
     markup.add(website, start)#Текст Кнопки и адрес ссылки
-    my_bot.send_message(message.chat.id, "Перейдите на сайт", reply_markup=markup)
-# PROVERKA PROVERKA
-my_bot.polling(none_stop=True)
+    bot.send_message(message.chat.id, "Выберите команду", reply_markup=markup)
+
+@bot.message_handler()
+def get_user_text(message):
+    #bot.send_message(message.chat.id, message, parse_mode="html")
+    if message.text.lower == "Привет" or "Hi" or "Hello":
+        bot.send_message(message.chat.id, "И тебе привет" ,parse_mode="html")# Выводится вся информация из message (Нужно потом удалить)
+    elif message.text.lower == "id":
+        bot.send_message(message.chat.id, f"Твой id:{message.from_user.id}", parse_mode="html")
+    else:
+        bot.send_message(message.chat.id, "Я тебя не понимаю", parse_mode="html")
+
+bot.polling(none_stop=True)
