@@ -39,7 +39,14 @@ def website(message):
     Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
     Novorossiysk = types.KeyboardButton("/Novorossiysk")
     Bryansk = types.KeyboardButton("/Bryansk")
+    Rostov_on_don = types.KeyboardButton("/Rostov-on-don")
+    Voronezh = types.KeyboardButton("/Voronezh")
+    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
+    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
+    Novorossiysk = types.KeyboardButton("/Novorossiysk")
+    Bryansk = types.KeyboardButton("/Bryansk")
     Velikiy_Novgorod = types.KeyboardButton("/Velikiy_Novgorod")
+
     markup.add(Tver, Moscow, Saint_Petersburg, Nizhny_Novgorod, Novorossiysk, Bryansk, Velikiy_Novgorod)#Текст Кнопки и адрес ссылки
     bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
 
