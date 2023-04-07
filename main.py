@@ -27,14 +27,39 @@ def start(message):
 @bot.message_handler(commands = ['website'])
 def website(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Посетить сайт Афиши", url ="https://www.afisha.ru/tver"))#Текст Кнопки и адрес ссылки
-    bot.send_message(message.chat.id, "Официальнный сайт Афиши в Твери", reply_markup=markup)
+    markup.add(types.InlineKeyboardButton("Посетить сайт Афиши", url ="https://www.afisha.ru"))#Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Официальнный сайт Афиши", reply_markup=markup)
 
 @bot.message_handler(commands = ['citys'])
 def website(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 20)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
     Tver = types.KeyboardButton("/Tver")
     Moscow = types.KeyboardButton("/Moscow")
+    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
+    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
+    Novorossiysk = types.KeyboardButton("/Novorossiysk")
+    Bryansk = types.KeyboardButton("/Bryansk")
+    Rostov_on_don = types.KeyboardButton("/Rostov-on-don")
+    Voronezh = types.KeyboardButton("/Voronezh")
+    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
+    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
+    Novorossiysk = types.KeyboardButton("/Novorossiysk")
+    Bryansk = types.KeyboardButton("/Bryansk")
+    Velikiy_Novgorod = types.KeyboardButton("/Velikiy_Novgorod")
+
+    markup.add(Tver, Moscow, Saint_Petersburg, Nizhny_Novgorod, Novorossiysk, Bryansk, Velikiy_Novgorod)#Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
+
+@bot.message_handler(commands = ["/Tver"])
+def tver_city(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Посетить сайт Афиши", url="https://www.afisha.ru"))  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Официальнный сайт Афиши", reply_markup=markup)
+
+@bot.message_handler(commands=["/Tver"])
+    def tver_city(message):
+
+        Moscow = types.KeyboardButton("/Moscow")
     Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
     Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
     Novorossiysk = types.KeyboardButton("/Novorossiysk")
