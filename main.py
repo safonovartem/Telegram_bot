@@ -72,4 +72,3 @@ def get_user_text(message):
         bot.send_message(message.chat.id, "Я тебя не понимаю", parse_mode="html")
 
 bot.polling(none_stop=True)
-#Hello World
