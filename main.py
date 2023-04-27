@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as b
 import telebot
 from telebot import types
 
@@ -22,6 +22,11 @@ def start(message):
     start = types.KeyboardButton("/start")
     citys = types.KeyboardButton("/citys")
     markup.add(website, start, citys)  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Здравствуйте. Этот бот поможет вам узнать актуальные мероприятия в вашем городе", reply_markup=markup)
+    bot.send_message(message.chat.id, "Вот список команд, которые вам доступны\n"
+                                      "/start - Активировать бота\n"
+                                      "/website - Ссылка на официальный сайт Афиши\n"
+                                      "/citys - Команда для выбора вашего города", reply_markup=markup)
     bot.send_message(message.chat.id, "Выберите команду", reply_markup=markup)
 
 @bot.message_handler(commands = ['website'])
@@ -32,54 +37,35 @@ def website(message):
 
 @bot.message_handler(commands = ['citys'])
 def website(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 20)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 2)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
     Tver = types.KeyboardButton("/Tver")
     Moscow = types.KeyboardButton("/Moscow")
-    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
-    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
-    Novorossiysk = types.KeyboardButton("/Novorossiysk")
-    Bryansk = types.KeyboardButton("/Bryansk")
-    Rostov_on_don = types.KeyboardButton("/Rostov-on-don")
-    Voronezh = types.KeyboardButton("/Voronezh")
-    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
-    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
-    Novorossiysk = types.KeyboardButton("/Novorossiysk")
-    Bryansk = types.KeyboardButton("/Bryansk")
-    Velikiy_Novgorod = types.KeyboardButton("/Velikiy_Novgorod")
 
-    markup.add(Tver, Moscow, Saint_Petersburg, Nizhny_Novgorod, Novorossiysk, Bryansk, Velikiy_Novgorod)#Текст Кнопки и адрес ссылки
+    markup.add(Tver, Moscow)#Текст Кнопки и адрес ссылки
     bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
 
 @bot.message_handler(commands = ["/Tver"])
 def tver_city(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Посетить сайт Афиши", url="https://www.afisha.ru"))  # Текст Кнопки и адрес ссылки
-    bot.send_message(message.chat.id, "Официальнный сайт Афиши", reply_markup=markup)
+    markup.add(types.InlineKeyboardButton("Сайт Афиши в Твери", url="https://www.afisha.ru/tver/"))  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, reply_markup=markup)
+    URL = "https://www.afisha.ru/tver/"
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_films = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_films]
 
-@bot.message_handler(commands=["/Tver"])
-    def tver_city(message):
+    list_of_jokes = parser(URL)
+    del list_of_jokes[8:20]
+    bot.send_message(message.chat.id, list_of_jokes, parse_mode="html")
 
-        Moscow = types.KeyboardButton("/Moscow")
-    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
-    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
-    Novorossiysk = types.KeyboardButton("/Novorossiysk")
-    Bryansk = types.KeyboardButton("/Bryansk")
-    Rostov_on_don = types.KeyboardButton("/Rostov-on-don")
-    Voronezh = types.KeyboardButton("/Voronezh")
-    Saint_Petersburg = types.KeyboardButton("/Saint-Petersburg")
-    Nizhny_Novgorod = types.KeyboardButton("/Nizhny_Novgorod")
-    Novorossiysk = types.KeyboardButton("/Novorossiysk")
-    Bryansk = types.KeyboardButton("/Bryansk")
-    Velikiy_Novgorod = types.KeyboardButton("/Velikiy_Novgorod")
-
-    markup.add(Tver, Moscow, Saint_Petersburg, Nizhny_Novgorod, Novorossiysk, Bryansk, Velikiy_Novgorod)#Текст Кнопки и адрес ссылки
-    bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
 
 @bot.message_handler()
 def get_user_text(message):
     #bot.send_message(message.chat.id, message, parse_mode="html")
     if message.text.lower == "Привет" or "Hi" or "Hello":
-        bot.send_message(message.chat.id, "И тебе привет" ,parse_mode="html")# Выводится вся информация из message (Нужно потом удалить)
+        bot.send_message(message.chat.id, "И тебе привет",parse_mode="html")# Выводится вся информация из message (Нужно потом удалить)
     elif message.text.lower == "id":
         bot.send_message(message.chat.id, f"Твой id:{message.from_user.id}", parse_mode="html")
     else:
