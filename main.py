@@ -47,7 +47,8 @@ def website(message):
 @bot.message_handler(commands = ['Tver'])
 def tver_city(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Сайт Афиши в Твери", url="https://www.afisha.ru/tver/"))  # Текст Кнопки и адрес ссылки
+    markup.add(types.InlineKeyboardButton("Сайт Афиши в Твери", url="https://www.afisha.ru/tver/"))# Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Официальнный сайт Афиши в Твери", reply_markup=markup)#Возможно эту строку надо перенести в конец
     URL = "https://www.afisha.ru/tver/"
 
     def parser(url):
@@ -58,7 +59,6 @@ def tver_city(message):
 
     list_of_jokes = parser(URL)
     Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    #del list_of_jokes
     if Trach_words in list_of_jokes:
         del list_of_jokes[list_of_jokes.index(Trach_words)]
 
@@ -69,8 +69,8 @@ def tver_city(message):
 def get_user_text(message):
     #bot.send_message(message.chat.id, message, parse_mode="html")
     if message.text.lower == "Привет" or "Hi" or "Hello":
-        bot.send_message(message.chat.id, "И тебе привет", parse_mode="html")# Выводится вся информация из message (Нужно потом удалить)
-    elif message.text.lower == "id":
+        bot.send_message(message.chat.id, "И тебе привет", parse_mode="html")
+    elif message.text.lower == "id":# Выводится вся информация из message (Нужно потом удалить)
         bot.send_message(message.chat.id, f"Твой id:{message.from_user.id}", parse_mode="html")
     else:
         bot.send_message(message.chat.id, "Я тебя не понимаю", parse_mode="html")
