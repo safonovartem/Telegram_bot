@@ -40,16 +40,22 @@ def website(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 2)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
     Tver = types.KeyboardButton("/Tver")
     Moscow = types.KeyboardButton("/Moscow")
-
     markup.add(Tver, Moscow)#Текст Кнопки и адрес ссылки
     bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
 
 @bot.message_handler(commands = ['Tver'])
 def tver_city(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)  # Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    Movie = types.KeyboardButton("/Films_in_Tver")
+    Concerts = types.KeyboardButton("/Сoncerts_in_Tver")
+    markup.add(Movie, Concerts)  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Отлично, теперь выберите какой тип мероприятий вас интересует", reply_markup=markup)
+
+@bot.message_handler(commands= ['Films_in_Tver'])
+def films_in_tver(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Сайт Афиши в Твери", url="https://www.afisha.ru/tver/"))# Текст Кнопки и адрес ссылки
-    bot.send_message(message.chat.id, "Официальнный сайт Афиши в Твери", reply_markup=markup)#Возможно эту строку надо перенести в конец
-    URL = "https://www.afisha.ru/tver/"
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши", url="https://www.afisha.ru/tver/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/tver/events/movies/"
 
     def parser(url):
         r = requests.get(url)
@@ -57,13 +63,39 @@ def tver_city(message):
         Text_for_films = soup.find_all('div', class_="mQ7Bh")
         return [c.text for c in Text_for_films]
 
-    list_of_jokes = parser(URL)
+    Text_for_films = parser(URL)
     Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Trach_words in list_of_jokes:
-        del list_of_jokes[list_of_jokes.index(Trach_words)]
+    if Text_for_films in Trach_words:
+        del Text_for_films[Text_for_films.index(Trach_words)]
 
-    bot.send_message(message.chat.id, list_of_jokes, parse_mode="html")
+    for i in Text_for_films:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
+    bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть трейлер прямо на сайте Афиши",reply_markup=markup)  # Возможно эту строку надо перенести в конец
+
+@bot.message_handler(commands= ['Сoncerts_in_Tver'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши", url="https://www.afisha.ru/tver/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/tver/events/concerts/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_concerts]
+
+    Text_for_concerts = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_concerts in Trach_words:
+        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+
+    for i in Text_for_concerts:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть описание прямо на сайте Афиши", reply_markup=markup)  # Возможно эту строку надо перенести в конец
 
 @bot.message_handler()
 def get_user_text(message):
