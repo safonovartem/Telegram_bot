@@ -273,7 +273,7 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_concerts_Msc = soup.find_all('div', class_="mQ7Bh")
+        Text_films_Novosibirsk = soup.find_all('div', class_="mQ7Bh")
         return [c.text for c in Text_concerts_Msc]
 
     Text_concerts_Msc = parser(URL)
