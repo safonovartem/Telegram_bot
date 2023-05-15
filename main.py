@@ -40,7 +40,8 @@ def website(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width= 2)#Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
     Tver = types.KeyboardButton("/Tver")
     Moscow = types.KeyboardButton("/Moscow")
-    markup.add(Tver, Moscow)#Текст Кнопки и адрес ссылки
+    Saint_Petersburg = types.KeyboardButton("/Saint_Petersburg")
+    markup.add(Tver, Moscow, Saint_Petersburg)#Текст Кнопки и адрес ссылки
     bot.send_message(message.chat.id, "Выберите свой город", reply_markup=markup)
 
 @bot.message_handler(commands = ['Tver'])
@@ -97,6 +98,164 @@ def films_in_tver(message):
     bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
                                       "Вы можете купить билеты или посмотреть описание прямо на сайте Афиши", reply_markup=markup)  # Возможно эту строку надо перенести в конец
 
+@bot.message_handler(commands = ['Moscow'])
+def tver_city(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)  # Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    Movie = types.KeyboardButton("/Films_in_Moscow")
+    Concerts = types.KeyboardButton("/Сoncerts_in_Moscow")
+    markup.add(Movie, Concerts)  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Отлично, теперь выберите какой тип мероприятий вас интересует", reply_markup=markup)
+
+@bot.message_handler(commands= ['Films_in_Moscow'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши", url="https://www.afisha.ru/msk/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/msc/events/movies/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_films = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_films]
+
+    Text_for_films = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_films in Trach_words:
+        del Text_for_films[Text_for_films.index(Trach_words)]
+
+    for i in Text_for_films:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть трейлер прямо на сайте Афиши",reply_markup=markup)  # Возможно эту строку надо перенести в конец
+@bot.message_handler(commands= ['Сoncerts_in_Moscow'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши", url="https://www.afisha.ru/msk/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/msk/events/concerts/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_concerts]
+
+    Text_for_concerts = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_concerts in Trach_words:
+        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+
+    for i in Text_for_concerts:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть описание прямо на сайте Афиши", reply_markup=markup)  # Возможно эту строку надо перенести в конец
+
+@bot.message_handler(commands = ['Saint_Petersburg'])
+def tver_city(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)  # Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    Movie = types.KeyboardButton("/Films_in_Saint_Petersburg")
+    Concerts = types.KeyboardButton("/Сoncerts_in_Saint_Petersburg")
+    markup.add(Movie, Concerts)  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Отлично, теперь выберите какой тип мероприятий вас интересует", reply_markup=markup)
+
+@bot.message_handler(commands= ['Films_in_Saint_Petersburg'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши в Санкт-Петербурге", url="https://www.afisha.ru/spb/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/spb/events/movies/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_films = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_films]
+
+    Text_for_films = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_films in Trach_words:
+        del Text_for_films[Text_for_films.index(Trach_words)]
+
+    for i in Text_for_films:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть трейлер прямо на сайте Афиши",reply_markup=markup)  # Возможно эту строку надо перенести в конец
+@bot.message_handler(commands= ['Сoncerts_in_Saint_Petersburg'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши в Санкт-Петербурге", url="https://www.afisha.ru/spb/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/spb/events/concerts/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_concerts]
+
+    Text_for_concerts = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_concerts in Trach_words:
+        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+
+    for i in Text_for_concerts:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть описание прямо на сайте Афиши", reply_markup=markup)  # Возможно эту строку надо перенести в конец
+
+@bot.message_handler(commands = ['Novosibirsk'])
+def tver_city(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)  # Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
+    Movie = types.KeyboardButton("/Films_in_Novosibirsk")
+    Concerts = types.KeyboardButton("/Сoncerts_in_Novosibirsk")
+    markup.add(Movie, Concerts)  # Текст Кнопки и адрес ссылки
+    bot.send_message(message.chat.id, "Отлично, теперь выберите какой тип мероприятий вас интересует", reply_markup=markup)
+
+@bot.message_handler(commands= ['Films_in_Novosibirsk'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши в Новосибирске", url="https://www.afisha.ru/novosibirsk/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/novosibirsk/events/movies/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_films = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_films]
+
+    Text_for_films = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_films in Trach_words:
+        del Text_for_films[Text_for_films.index(Trach_words)]
+
+    for i in Text_for_films:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть трейлер прямо на сайте Афиши",reply_markup=markup)  # Возможно эту строку надо перенести в конец
+@bot.message_handler(commands= ['Сoncerts_in_Novosibirsk'])
+def films_in_tver(message):
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши в Новосибирске", url="https://www.afisha.ru/novosibirsk/"))# Текст Кнопки и адрес ссылки
+    URL = "https://www.afisha.ru/novosibirsk/events/concerts/"
+
+    def parser(url):
+        r = requests.get(url)
+        soup = b(r.text, 'html.parser')  # Парсинг
+        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_concerts]
+
+    Text_for_concerts = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
+    if Text_for_concerts in Trach_words:
+        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+
+    for i in Text_for_concerts:
+        bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
+
+    bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
+                                      "Вы можете купить билеты или посмотреть описание прямо на сайте Афиши", reply_markup=markup)  # Возможно эту строку надо перенести в конец
 @bot.message_handler()
 def get_user_text(message):
     #bot.send_message(message.chat.id, message, parse_mode="html")
