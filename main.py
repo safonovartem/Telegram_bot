@@ -61,15 +61,23 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_films = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_films]
+        Text_films_Tver = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_films_Tver]
 
-    Text_for_films = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_films in Trach_words:
-        del Text_for_films[Text_for_films.index(Trach_words)]
+    Text_films_Tver = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
+    def remove_common(Text_films_Tver, Trach_words):
+        for i in Text_films_Tver[:]:
+            if i in Trach_words:
+                Text_films_Tver.remove(i)
+                Trach_words.remove(i)
 
-    for i in Text_for_films:
+    c = remove_common(Text_films_Tver, Trach_words)
+
+    for i in Text_films_Tver:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
     bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
@@ -84,22 +92,31 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_concerts]
+        Text_for_films = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_for_films]
 
-    Text_for_concerts = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_concerts in Trach_words:
-        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+    Text_concerts_Tver = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
 
-    for i in Text_for_concerts:
+    def remove_common(Text_concerts_Tver, Trach_words):
+        for i in Text_concerts_Tver[:]:
+            if i in Trach_words:
+                Text_concerts_Tver.remove(i)
+                Trach_words.remove(i)
+
+    c = remove_common(Text_concerts_Tver, Trach_words)
+
+    for i in Text_concerts_Tver:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
     bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
                                       "Вы можете купить билеты или посмотреть описание прямо на сайте Афиши", reply_markup=markup)  # Возможно эту строку надо перенести в конец
 
 @bot.message_handler(commands = ['Moscow'])
-def tver_city(message):
+def Msc_city(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True,row_width=2)  # Параметры: подстраиваться под размеры = Да, Сколько кнопок в ряде
     Movie = types.KeyboardButton("/Films_in_Moscow")
     Concerts = types.KeyboardButton("/Сoncerts_in_Moscow")
@@ -107,7 +124,7 @@ def tver_city(message):
     bot.send_message(message.chat.id, "Отлично, теперь выберите какой тип мероприятий вас интересует", reply_markup=markup)
 
 @bot.message_handler(commands= ['Films_in_Moscow'])
-def films_in_tver(message):
+def films_Msc(message):
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши", url="https://www.afisha.ru/msk/"))# Текст Кнопки и адрес ссылки
     URL = "https://www.afisha.ru/msc/events/movies/"
@@ -115,21 +132,30 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_films = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_films]
+        Text_films_Msc = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_films_Msc]
 
-    Text_for_films = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_films in Trach_words:
-        del Text_for_films[Text_for_films.index(Trach_words)]
+    Text_films_Msc = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
 
-    for i in Text_for_films:
+    def remove_common(Text_films_Msc, Trach_words):
+        for i in Text_films_Msc[:]:
+            if i in Trach_words:
+                Text_films_Msc.remove(i)
+                Trach_words.remove(i)
+
+    c = remove_common(Text_films_Msc, Trach_words)
+
+    for i in Text_films_Msc:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
     bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
                                       "Вы можете купить билеты или посмотреть трейлер прямо на сайте Афиши",reply_markup=markup)  # Возможно эту строку надо перенести в конец
 @bot.message_handler(commands= ['Сoncerts_in_Moscow'])
-def films_in_tver(message):
+def concerts_Msc(message):
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("Перейти на сайт Афиши", url="https://www.afisha.ru/msk/"))# Текст Кнопки и адрес ссылки
     URL = "https://www.afisha.ru/msk/events/concerts/"
@@ -137,15 +163,24 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_concerts]
+        Text_concerts_Msc = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_concerts_Msc]
 
-    Text_for_concerts = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_concerts in Trach_words:
-        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+    Text_concerts_Msc = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
 
-    for i in Text_for_concerts:
+    def remove_common(Text_concerts_Msc, Trach_words):
+        for i in Text_concerts_Msc[:]:
+            if i in Trach_words:
+                Text_concerts_Msc.remove(i)
+                Trach_words.remove(i)
+
+    c = remove_common(Text_concerts_Msc, Trach_words)
+
+    for i in Text_concerts_Msc:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
     bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
@@ -168,15 +203,24 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_films = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_films]
+        Text_concerts_Msc = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_films_spb]
 
-    Text_for_films = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_films in Trach_words:
-        del Text_for_films[Text_for_films.index(Trach_words)]
+    Text_films_spb = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
 
-    for i in Text_for_films:
+    def remove_common(Text_films_spb, Trach_words):
+        for i in Text_films_spb[:]:
+            if i in Trach_words:
+                Text_films_spb.remove(i)
+                Trach_words.remove(i)
+
+    c = remove_common(Text_films_spb, Trach_words)
+
+    for i in Text_films_spb:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
     bot.send_message(message.chat.id, " Это фильмы, которые идут в вашем городе прямо сейчас\n"
@@ -190,15 +234,23 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_concerts = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_concerts]
+        Text_concerts_Msc = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_concerts_Msc]
 
-    Text_for_concerts = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_concerts in Trach_words:
-        del Text_for_concerts[Text_for_concerts.index(Trach_words)]
+    Text_concerts_spb = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
 
-    for i in Text_for_concerts:
+    def remove_common(Text_concerts_spb, Trach_words):
+        for i in Text_concerts_spb[:]:
+            if i in Trach_words:
+                Text_concerts_spb.remove(i)
+                Trach_words.remove(i)
+
+    c = remove_common(Text_concerts_spb, Trach_words)
+    for i in Text_concerts_spb:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
 
     bot.send_message(message.chat.id, " Это концерты, которые идут в вашем городе прямо сейчас\n"
@@ -221,13 +273,22 @@ def films_in_tver(message):
     def parser(url):
         r = requests.get(url)
         soup = b(r.text, 'html.parser')  # Парсинг
-        Text_for_films = soup.find_all('div', class_="mQ7Bh")
-        return [c.text for c in Text_for_films]
+        Text_concerts_Msc = soup.find_all('div', class_="mQ7Bh")
+        return [c.text for c in Text_concerts_Msc]
 
-    Text_for_films = parser(URL)
-    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще', '«Афиша» в соц. сетях', 'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время', 'Рассылка «Афиши»: главные события недели — у вас на почте']
-    if Text_for_films in Trach_words:
-        del Text_for_films[Text_for_films.index(Trach_words)]
+    Text_concerts_Msc = parser(URL)
+    Trach_words = ['События', 'Кино', 'Театр', 'Концерты', 'Дети', 'Об «Афише»', 'О нас', 'Проекты', 'Еще',
+                   '«Афиша» в соц. сетях',
+                   'Мобильное приложение «Афиши» — самый удобный способ выбрать, как провести свободное время',
+                   'Рассылка «Афиши»: главные события недели — у вас на почте']
+
+    def remove_common(Text_concerts_Msc, Trach_words):
+        for i in Text_concerts_Msc[:]:
+            if i in Trach_words:
+                Text_concerts_Msc.remove(i)
+                Trach_words.remove(i)
+
+    c = remove_common(Text_concerts_Msc, Trach_words)
 
     for i in Text_for_films:
         bot.send_message(message.chat.id, i , parse_mode="html")#Сделать цикл для отправки сообщений
